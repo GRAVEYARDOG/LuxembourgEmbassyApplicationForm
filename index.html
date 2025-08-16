@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luxembourg Embassy Webapp</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {font-family:'Poppins',sans-serif;background:#f0f4f8;color:#000;overflow-x:hidden;}
+
+    /* Loader */
+    .container {position:absolute;width:200px;height:200px;top:0;bottom:0;left:0;right:0;margin:auto;z-index:9999;}
+    .item {width:100px;height:100px;position:absolute;border-radius:16px;}
+    .item-1{background-color:#FA5667;top:0;left:0;z-index:1;animation:item-1_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;}
+    .item-2{background-color:#7A45E5;top:0;right:0;animation:item-2_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;}
+    .item-3{background-color:#1B91F7;bottom:0;right:0;z-index:1;animation:item-3_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;}
+    .item-4{background-color:#FAC24C;bottom:0;left:0;animation:item-4_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;}
+
+    @keyframes item-1_move{0%,100%{transform:translate(0,0)}25%{transform:translate(0,100px)}50%{transform:translate(100px,100px)}75%{transform:translate(100px,0)}}
+    @keyframes item-2_move{0%,100%{transform:translate(0,0)}25%{transform:translate(-100px,0)}50%{transform:translate(-100px,100px)}75%{transform:translate(0,100px)}}
+    @keyframes item-3_move{0%,100%{transform:translate(0,0)}25%{transform:translate(0,-100px)}50%{transform:translate(-100px,-100px)}75%{transform:translate(-100px,0)}}
+    @keyframes item-4_move{0%,100%{transform:translate(0,0)}25%{transform:translate(100px,0)}50%{transform:translate(100px,-100px)}75%{transform:translate(0,-100px)}}
+
+    /* Welcome text animation */
+    @font-face {
+      font-family:'TheFont';
+      src:url("https://garet.typeforward.com/assets/fonts/shared/TFMixVF.woff2") format('woff2');
+      font-weight:100 900;
+      font-style:normal;
+      font-display:swap;
+    }
+
+    .welcome-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:#8ABCFF;text-align:center;flex-direction:column;opacity:0;transition:opacity 1s ease;}
+    .welcome-screen.show{opacity:1;}
+    .welcome-screen span{font-family:'TheFont',sans-serif;font-size:clamp(2vw,5vw,10vh);color:#fff;display:inline-block;font-weight:100;animation:letter-breathe 3s ease-in-out infinite alternate;line-height:1.2;}
+    @keyframes letter-breathe {0% {font-weight:100;}50% {font-weight:900;}100% {font-weight:100;}}
+
+    /* Home Screen */
+    .home-screen{display:none;min-height:100vh;color:#000;padding:0;}
+    .home-screen.show{display:block;animation:fadeIn 1s ease forwards;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+    header {
+      background:#ffffff;
+      padding:15px 40px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      color:#000000;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      position:sticky;top:0;z-index:100;
+      gap:15px;
+    }
+    header img {
+      height:45px;
+    }
+    header h1 {
+      font-size:15px;
+      margin:0;
+      font-family:'Playfair Display', serif;
+      font-weight:300;
+      letter-spacing:1px;
+    }
+
+    .hero {
+      background:linear-gradient(to right,#8ABCFF,#5daafc);
+      color:#fff;
+      text-align:center;
+      padding:80px 20px;
+      animation:fadeIn 2s ease;
+    }
+    .hero h2 {font-size:36px;margin-bottom:10px;font-family:'TheFont',sans-serif;animation:letter-breathe 4s infinite alternate;}
+    .hero p {font-size:18px;opacity:0.9;}
+
+    .grid-sections {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+      padding:40px;
+    }
+    .info-card {
+      background:#fff;
+      border-radius:16px;
+      padding:30px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);
+      transition:transform 0.3s;
+    }
+    .info-card:hover {transform:translateY(-5px);}
+    .info-card h3 {
+      font-family:'TheFont',sans-serif;
+      font-weight:100;
+      animation:letter-breathe 4s ease-in-out infinite alternate;
+      margin-bottom:10px;
+      color:#00020489;
+    }
+    .info-card p {color:#444;font-size:15px;line-height:1.5;}
+
+    .content-section {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      padding:60px 20px;
+      text-align:center;
+    }
+    .card {
+      background:#fff;
+      border-radius:16px;
+      padding:40px;
+      max-width:600px;
+      width:100%;
+      box-shadow:0 8px 30px rgba(0,0,0,0.15);
+      transition:transform 0.3s;
+    }
+    .card:hover{transform:translateY(-5px);}
+    .card h2{
+      margin-bottom:15px;
+      color:#8ABCFF;
+      font-family:'TheFont',sans-serif;
+      font-weight:100;
+      animation:letter-breathe 4s ease-in-out infinite alternate;
+    }
+    .card p{color:#555;font-size:16px;line-height:1.5;}
+
+    @keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 #8ABCFF; }
+  50% { transform: scale(1.08); box-shadow: 0 0 18px 6px #8ABCFF44; }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 #8ABCFF; }
+}
+
+
+    .continue-btn {
+      background:linear-gradient(90deg,#8ABCFF,#5daafc);
+      color:#fff;
+      border:none;
+      padding:14px 28px;
+      font-size:17px;
+      border-radius:8px;
+      cursor:pointer;
+      margin-top:20px;
+      transition:transform 0.3s,box-shadow 0.3s;
+        animation: pulse 1.2s infinite;
+    }
+    .continue-btn:hover{transform:scale(1.05);box-shadow:0 6px 18px rgba(0,0,0,0.2);}
+    .continue-btn span {
+      display:inline-block;
+      font-family:'TheFont',sans-serif;
+      font-weight:100;
+      animation:letter-breathe 3s ease-in-out infinite alternate;
+    }
+
+    footer {
+      background:#8ABCFF;
+      color:#fff;
+      padding:20px;
+      text-align:center;
+      font-size:14px;
+      margin-top:60px;
+      position:relative;
+    }
+    footer::before {
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;height:4px;
+      background:linear-gradient(90deg,#FA5667,#7A45E5,#1B91F7,#FAC24C);
+      animation:moveStripe 6s linear infinite;
+    }
+    @keyframes moveStripe {0%{background-position:0 0;}100%{background-position:400px 0;}}
+
+    /* Form Page */
+    #form-page {
+      display:none;
+      min-height:100vh;
+      padding:60px 20px;
+      background:#f9fcff;
+      animation:fadeIn 1s ease;
+    }
+    #form-page.show {display:block;}
+    #form-page h2 {
+      text-align:center;
+      margin-bottom:20px;
+      color:#8ABCFF;
+      font-family:'TheFont',sans-serif;
+      font-weight:100;
+      animation:letter-breathe 4s ease-in-out infinite alternate;
+    }
+    form {
+      max-width:600px;
+      margin:0 auto;
+      background:#fff;
+      padding:30px;
+      border-radius:16px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);
+    }
+    form label {display:flex;align-items:center;gap:10px;margin:15px 0 5px;color:#333;font-weight:600;}
+    .label-icon lord-icon{width:24px;height:24px;}
+    form .tip{font-size:12px;color:#6b7280;margin-top:4px;}
+    form input, form select, form textarea {
+      width:100%;
+      padding:12px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      font-size:15px;
+    }
+    form button {
+      margin-top:20px;
+      background:linear-gradient(90deg,#8ABCFF,#5daafc);
+      border:none;
+      color:#fff;
+      padding:12px 24px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:transform 0.3s,box-shadow 0.3s;
+    }
+    form button:hover{transform:scale(1.05);box-shadow:0 6px 18px rgba(0,0,0,0.2);}
+    
+  </style>
+  <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader" class="container">
+    <div class="item item-1"></div>
+    <div class="item item-2"></div>
+    <div class="item item-3"></div>
+    <div class="item item-4"></div>
+  </div>
+
+  <!-- Welcome Screen -->
+  <div id="welcome" class="welcome-screen">
+    <span>
+      WELCoME<br/>
+      To<br/>
+      Luxembourg<br/>
+      Embassy<br/>
+      Official Webapp
+    </span>
+  </div>
+
+  <!-- Home Screen -->
+  <div id="home" class="home-screen">
+    <header>
+<img src="images/Logo2.webp" alt="Luxembourg Embassy Logo">
+      <h1>Luxembourg Embassy</h1>
+    </header>
+
+    <section class="hero">
+      <h2>Welcome to the Embassy Portal</h2>
+      <p>Your gateway to official applications and services</p>
+    </section>
+
+    <section class="grid-sections">
+      <div class="info-card">
+        <h3>Visa Information</h3>
+        <p>Find detailed guidelines for applying visas, eligibility requirements, and processing timelines.</p>
+      </div>
+      <div class="info-card">
+        <h3>Consular Services</h3>
+        <p>Access support for nationals abroad including emergency documents, legalization, and more.</p>
+      </div>
+      <div class="info-card">
+        <h3>News & Updates</h3>
+        <p>Stay up-to-date with the latest embassy announcements, advisories, and public notices.</p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="card">
+        <h2>Application Form</h2>
+        <p>Tap below to continue to the application form for Luxembourg Embassy.</p>
+        <button class="continue-btn" onclick="goToForm()"><span>Go to Form</span></button>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2025 Luxembourg Embassy. All rights reserved.
+    </footer>
+  </div>
+
+  
+
+  <!-- Form Page -->
+  <div id="form-page">
+    <h2>Application Form</h2>
+    <!-- Add Font Awesome CDN in <head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<form id="embassyForm" novalidate>
+  <!-- First Name -->
+  <label for="fname">
+    <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
+    First Name
+  </label>
+  <input type="text" id="fname" name="fname" autocomplete="given-name" required>
+
+  <!-- Father's Name -->
+  <label for="father">
+    <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
+    Father's Name
+  </label>
+  <input type="text" id="father" name="father" required>
+
+  <!-- Grandfather's Name -->
+  <label for="gfather">
+    <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
+    Grandfather's Name
+  </label>
+  <input type="text" id="gfather" name="gfather" required>
+
+  <!-- Email -->
+  <label for="email">
+    <i class="fa-solid fa-envelope" style="color:#8ABCFF;"></i>
+    Email Address
+  </label>
+  <input type="email" id="email" name="email" placeholder="name@example.com" required>
+
+  <!-- Zip Code -->
+  <label for="zipcode">
+    <i class="fa-solid fa-location-dot" style="color:#8ABCFF;"></i>
+    Zip Code
+  </label>
+  <input type="text" id="zipcode" name="zipcode" maxlength="10" required>
+
+  <!-- Passport ID -->
+  <label for="passport">
+    <i class="fa-solid fa-id-card" style="color:#8ABCFF;"></i>
+    Passport ID Number
+  </label>
+  <input type="text" id="passport" name="passport" maxlength="20" required>
+
+  <!-- State of Residence -->
+  <label for="country">
+    <i class="fa-solid fa-globe" style="color:#8ABCFF;"></i>
+    State of Residence
+  </label>
+  <select id="country" name="country" required>
+    <option value="">-- Select Country --</option>
+  </select>
+
+  <!-- Phone Number -->
+  <label for="phoneCode">
+    <i class="fa-solid fa-phone" style="color:#8ABCFF;"></i>
+    Phone Number
+  </label>
+  <div style="display:grid;grid-template-columns:160px 1fr;gap:10px;align-items:center;">
+    <select id="phoneCode" name="phoneCode" required></select>
+    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Local number" required>
+  </div>
+
+  <!-- Date of Birth -->
+  <label for="dob">
+    <i class="fa-solid fa-calendar" style="color:#8ABCFF;"></i>
+    Date of Birth
+  </label>
+  <input type="date" id="dob" name="dob" required>
+
+  <!-- Job Type -->
+  <label for="job">
+    <i class="fa-solid fa-briefcase" style="color:#8ABCFF;"></i>
+    Job Type
+  </label>
+  <select id="job" name="job" required>
+    <option value="">-- Select Job Type --</option>
+  </select>
+
+  <!-- Submit Button -->
+  <button type="submit">
+    <i class="fa-solid fa-paper-plane" style="margin-right:6px;"></i>
+    Submit Application
+  </button>
+</form>
+  </div>
+
+<div id="success-message"
+  style="
+    display:none;
+    position:fixed;
+    left:0; top:0;
+    width:100vw; height:100vh;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:#fff;
+    z-index:9999;
+  "
+>
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" style="position:absolute;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;"></canvas>
+  <!-- Animated Tick SVG -->
+  <svg id="tick" width="120" height="120" viewBox="0 0 120 120" style="z-index:2; margin-bottom:30px;">
+    <circle cx="60" cy="60" r="50" fill="#8ABCFF" opacity="0.15"/>
+    <path id="tick-path" d="M35 65 L55 85 L85 45" stroke="#8ABCFF" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span style="font-family:'TheFont',sans-serif;font-size:clamp(2vw,5vw,10vh);color:#00c441;display:inline-block;font-weight:100;animation:letter-breathe 3s ease-in-out infinite alternate;line-height:1.2;z-index:2;">
+    Submission<br/>Successful!
+  </span>
+<!-- ...existing code... -->
+<!-- ...inside #success-message... -->
+<!-- ...inside #success-message... -->
+<p style="color:#8ABCFF;font-size:20px;margin-top:20px;font-family:sans-serif;z-index:2;text-align:center;">
+  Thank you for your application.<br>
+  <table id="user-info-table" style="
+    border-collapse:collapse;
+    margin:10px auto;
+    width:100vw;
+    font-size:17px;
+    font-family:sans-serif;
+    background:#fff;
+    border:1px solid #8ABCFF;
+  "></table>
+  We will contact you soon.
+</p>
+
+<!-- ...existing code... -->
+</div>
+
+
+  <script>
+    // Populate Countries (State of Residence)
+    const countries = [
+      'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
+      'Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo (Republic)','Congo (Democratic Republic)','Costa Rica','Côte d\'Ivoire','Croatia','Cuba','Cyprus','Czechia','Denmark','Djibouti','Dominica','Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana','Haiti','Honduras','Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati','Korea (North)','Korea (South)','Kuwait','Kyrgyzstan','Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar','Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Macedonia','Norway','Oman','Pakistan','Palau','Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal','Qatar','Romania','Russia','Rwanda','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','São Tomé and Príncipe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria','Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago','Tunisia','Türkiye','Turkmenistan','Tuvalu','Uganda','Ukraine','United Arab Emirates','United Kingdom','United States of America','Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe'
+    ];
+
+    const countrySelect = document.getElementById('country');
+    countries.forEach(c => { const opt=document.createElement('option'); opt.value=c; opt.textContent=c; countrySelect.appendChild(opt); });
+
+    // Populate Phone Codes (include Ethiopia +251)
+    const phoneCodes = [
+      ['+93','Afghanistan'],['+355','Albania'],['+213','Algeria'],['+376','Andorra'],['+244','Angola'],['+1','Antigua and Barbuda'],
+      ['+54','Argentina'],['+374','Armenia'],['+61','Australia'],['+43','Austria'],['+994','Azerbaijan'],['+1','Bahamas'],
+      ['+973','Bahrain'],['+880','Bangladesh'],['+1','Barbados'],['+375','Belarus'],['+32','Belgium'],['+501','Belize'],
+      ['+229','Benin'],['+975','Bhutan'],['+591','Bolivia'],['+387','Bosnia and Herzegovina'],['+267','Botswana'],['+55','Brazil'],
+      ['+673','Brunei'],['+359','Bulgaria'],['+226','Burkina Faso'],['+257','Burundi'],['+238','Cabo Verde'],['+855','Cambodia'],
+      ['+237','Cameroon'],['+1','Canada'],['+236','Central African Republic'],['+235','Chad'],['+56','Chile'],['+86','China'],
+      ['+57','Colombia'],['+269','Comoros'],['+242','Congo (Republic)'],['+243','Congo (DRC)'],['+506','Costa Rica'],['+225','Côte d\'Ivoire'],
+      ['+385','Croatia'],['+53','Cuba'],['+357','Cyprus'],['+420','Czechia'],['+45','Denmark'],['+253','Djibouti'],
+      ['+1','Dominica'],['+1','Dominican Republic'],['+593','Ecuador'],['+20','Egypt'],['+503','El Salvador'],['+240','Equatorial Guinea'],
+      ['+291','Eritrea'],['+372','Estonia'],['+268','Eswatini'],['+251','Ethiopia'],['+679','Fiji'],['+358','Finland'],['+33','France'],
+      ['+241','Gabon'],['+220','Gambia'],['+995','Georgia'],['+49','Germany'],['+233','Ghana'],['+30','Greece'],['+1','Grenada'],
+      ['+502','Guatemala'],['+224','Guinea'],['+245','Guinea-Bissau'],['+592','Guyana'],['+509','Haiti'],['+504','Honduras'],
+      ['+36','Hungary'],['+354','Iceland'],['+91','India'],['+62','Indonesia'],['+98','Iran'],['+964','Iraq'],['+353','Ireland'],
+      ['+972','Israel'],['+39','Italy'],['+1','Jamaica'],['+81','Japan'],['+962','Jordan'],['+7','Kazakhstan'],['+254','Kenya'],
+      ['+686','Kiribati'],['+850','Korea (North)'],['+82','Korea (South)'],['+965','Kuwait'],['+996','Kyrgyzstan'],['+856','Laos'],
+      ['+371','Latvia'],['+961','Lebanon'],['+266','Lesotho'],['+231','Liberia'],['+218','Libya'],['+423','Liechtenstein'],
+      ['+370','Lithuania'],['+352','Luxembourg'],['+261','Madagascar'],['+265','Malawi'],['+60','Malaysia'],['+960','Maldives'],
+      ['+223','Mali'],['+356','Malta'],['+692','Marshall Islands'],['+222','Mauritania'],['+230','Mauritius'],['+52','Mexico'],
+      ['+691','Micronesia'],['+373','Moldova'],['+377','Monaco'],['+976','Mongolia'],['+382','Montenegro'],['+212','Morocco'],
+      ['+258','Mozambique'],['+95','Myanmar'],['+264','Namibia'],['+674','Nauru'],['+977','Nepal'],['+31','Netherlands'],
+      ['+64','New Zealand'],['+505','Nicaragua'],['+227','Niger'],['+234','Nigeria'],['+389','North Macedonia'],['+47','Norway'],
+      ['+968','Oman'],['+92','Pakistan'],['+680','Palau'],['+970','Palestine'],['+507','Panama'],['+675','Papua New Guinea'],
+      ['+595','Paraguay'],['+51','Peru'],['+63','Philippines'],['+48','Poland'],['+351','Portugal'],['+974','Qatar'],
+      ['+40','Romania'],['+7','Russia'],['+250','Rwanda'],['+1','Saint Kitts and Nevis'],['+1','Saint Lucia'],
+      ['+1','Saint Vincent and the Grenadines'],['+685','Samoa'],['+378','San Marino'],['+239','São Tomé and Príncipe'],
+      ['+966','Saudi Arabia'],['+221','Senegal'],['+381','Serbia'],['+248','Seychelles'],['+232','Sierra Leone'],['+65','Singapore'],
+      ['+421','Slovakia'],['+386','Slovenia'],['+677','Solomon Islands'],['+252','Somalia'],['+27','South Africa'],['+211','South Sudan'],
+      ['+34','Spain'],['+94','Sri Lanka'],['+249','Sudan'],['+597','Suriname'],['+46','Sweden'],['+41','Switzerland'],
+      ['+963','Syria'],['+886','Taiwan'],['+992','Tajikistan'],['+255','Tanzania'],['+66','Thailand'],['+670','Timor-Leste'],
+      ['+228','Togo'],['+676','Tonga'],['+1','Trinidad and Tobago'],['+216','Tunisia'],['+90','Türkiye'],['+993','Turkmenistan'],
+      ['+688','Tuvalu'],['+256','Uganda'],['+380','Ukraine'],['+971','United Arab Emirates'],['+44','United Kingdom'],
+      ['+1','United States of America'],['+598','Uruguay'],['+998','Uzbekistan'],['+678','Vanuatu'],['+39','Vatican City'],
+      ['+58','Venezuela'],['+84','Vietnam'],['+967','Yemen'],['+260','Zambia'],['+263','Zimbabwe']
+    ];
+
+    const codeSelect = document.getElementById('phoneCode');
+    phoneCodes.forEach(([code, country])=>{ const opt=document.createElement('option'); opt.value=code; opt.textContent=`${country} (${code})`; codeSelect.appendChild(opt); });
+    // Preselect Ethiopia code by default
+    Array.from(codeSelect.options).forEach(o=>{ if(o.textContent.includes('Ethiopia')) codeSelect.value=o.value; });
+
+    // Populate Job Types with categories (65 items)
+    const jobGroups = {
+      'Driving & Transportation':[ 'Light Vehicle Driver','Heavy Vehicle Driver (e.g., Grader Operator)','House Driver','Trolley Operator' ],
+      'Security & Safety':[ 'Security Guard','CCTV Surveillance Operator','Office Security Personnel','Plumber','Electrician','HVAC Technician','AC Technician','Pumper' ],
+      'Domestic & Facility Services':[ 'Housekeeper','House Maid','House Cleaner','Housekeeping Supervisor','Houseman','Caretaker','Steward','Laundry Attendant','Bellman' ],
+      'Hospitality & Food Services':[ 'Receptionist','Waiter/Waitress','Barista','Sous Chef','Pastry Chef / Dessert Chef','Garde Manger Chef','Arabica Cuisine Chef','Kitchen Assistant','Private Cook','Room Attendant','Hotel Assistant Manager' ],
+      'Healthcare & Caregiving':[ 'Nurse','Junior Nurse','Home Care Nurse','Private Nurse','Junior Midwife / Clinical Nurse','Elderly Care Assistant','Live-in Support Assistant','Neonatal Intensive Care Unit (NICU) Nurse','Junior Physiotherapist' ],
+      'Childcare Services':[ 'Babysitter','Childcare Worker' ],
+      'Beauty & Salon Services':[ 'Hairdresser','Hairstylist','Beauty Therapist','Salon Manager','Nail Technician','Nail Art Instructor','Massage Therapist','Makeup Artist' ],
+      'Agriculture & Farming':[ 'Indoor Farmer','General Farm Worker' ],
+      'Administrative & Marketing':[ 'Junior Administrative Assistant','Junior Marketing Assistant','Junior Account Manager','Sales Representative','Purchaser' ],
+      'Skilled Labor':[ 'Construction Worker','Laborer','Tailor','Storekeeper','Supervisor' ],
+      'Retail & Customer Services':[ 'Cashier','Promoter' ]
+    };
+
+    const jobSelect=document.getElementById('job');
+    Object.entries(jobGroups).forEach(([group, options])=>{
+      const og=document.createElement('optgroup'); og.label=group; options.forEach(j=>{ const o=document.createElement('option'); o.value=j; o.textContent=j; og.appendChild(o); }); jobSelect.appendChild(og);
+    });
+
+    // Basic client-side validation
+    const form=document.getElementById('embassyForm');
+form.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  if(!form.checkValidity()){
+    form.reportValidity();
+    return;
+  }
+  // Get user input
+  const name = document.getElementById('fname').value;
+  const father = document.getElementById('father').value;
+  const gfather = document.getElementById('gfather').value;
+  const email = document.getElementById('email').value;
+  const zipcode = document.getElementById('zipcode').value;
+  const passport = document.getElementById('passport').value;
+  const country = document.getElementById('country').value;
+  const phoneCode = document.getElementById('phoneCode').value;
+  const phoneNumber = document.getElementById('phoneNumber').value;
+  const dob = document.getElementById('dob').value;
+  const job = document.getElementById('job').value;
+
+  // Update success message with user info as a list
+// ...existing code...
+document.getElementById('user-info-table').innerHTML = `
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">First Name</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${name}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Father's Name</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${father}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Grandfather's Name</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${gfather}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Email</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${email}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Zip Code</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${zipcode}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Passport ID</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${passport}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Country</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${country}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Phone</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${phoneCode} ${phoneNumber}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Date of Birth</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${dob}</td>
+  </tr>
+  <tr>
+    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Job Type</td>
+    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${job}</td>
+  </tr>
+`;
+// ...existing code...
+
+  // Show success message
+  document.getElementById('success-message').style.display='flex';
+  launchConfetti();
+  animateTick();
+
+  // Reset form
+  form.reset();
+});
+
+// ...existing code...
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const confettiCount = 80;
+  const confetti = [];
+  for(let i=0;i<confettiCount;i++){
+    confetti.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*-canvas.height,
+      r: Math.random()*6+4,
+      color: `hsl(${Math.random()*360},80%,60%)`,
+      tilt: Math.random()*10-10
+    });
+  }
+  function drawConfetti(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<confettiCount;i++){
+      let c=confetti[i];
+      ctx.beginPath();
+      ctx.arc(c.x,c.y,c.r,0,2*Math.PI);
+      ctx.fillStyle=c.color;
+      ctx.fill();
+      c.y+=2+Math.random()*2;
+      c.x+=Math.sin(c.tilt);
+      if(c.y>canvas.height){
+        c.y=Math.random()*-20;
+        c.x=Math.random()*canvas.width;
+      }
+    }
+  }
+  let confettiInterval = setInterval(drawConfetti,16);
+  setTimeout(()=>{
+    clearInterval(confettiInterval);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  },20000); // Confetti lasts 2s
+}
+
+function animateTick() {
+  const path = document.getElementById('tick-path');
+  const length = path.getTotalLength();
+  path.style.strokeDasharray = length;
+  path.style.strokeDashoffset = length;
+  path.getBoundingClientRect(); // Force reflow
+  path.style.transition = 'stroke-dashoffset 1s ease';
+  path.style.strokeDashoffset = '0';
+}
+// ...existing code...
+
+    window.onload=()=>{
+      setTimeout(()=>{
+        document.getElementById('loader').style.display='none';
+        const welcome=document.getElementById('welcome');
+        welcome.classList.add('show');
+        setTimeout(()=>{
+          welcome.style.display='none';
+          document.getElementById('home').classList.add('show');
+        },5000); // show welcome for 5s
+      },2500);
+    }
+
+    function goToForm(){
+      document.getElementById('home').style.display='none';
+      document.getElementById('form-page').classList.add('show');
+    }
+  </script>
+</body>
+</html>
