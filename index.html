@@ -6,12 +6,13 @@
   <title>Luxembourg Embassy Webapp</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     * {margin:0;padding:0;box-sizing:border-box;}
     body {font-family:'Poppins',sans-serif;background:#f0f4f8;color:#000;overflow-x:hidden;}
 
     /* Loader */
-    .container {position:absolute;width:200px;height:200px;top:0;bottom:0;left:0;right:0;margin:auto;z-index:9999;}
+    .container {position:absolute;width:200px;height:200px;top:0;bottom:0;left:0;right:0;margin:auto;z-index:9999;display:block;}
     .item {width:100px;height:100px;position:absolute;border-radius:16px;}
     .item-1{background-color:#eaeaea;top:0;left:0;z-index:1;animation:item-1_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;}
     .item-2{background-color:#8ABCFF;top:0;right:0;animation:item-2_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;}
@@ -195,7 +196,6 @@
       box-shadow:0 6px 20px rgba(0,0,0,0.1);
     }
     form label {display:flex;align-items:center;gap:10px;margin:15px 0 5px;color:#333;font-weight:600;}
-    .label-icon lord-icon{width:24px;height:24px;}
     form .tip{font-size:12px;color:#6b7280;margin-top:4px;}
     form input, form select, form textarea {
       width:100%;
@@ -213,9 +213,164 @@
       border-radius:8px;
       cursor:pointer;
       transition:transform 0.3s,box-shadow 0.3s;
+      font-size: 16px;
     }
     form button:hover{transform:scale(1.05);box-shadow:0 6px 18px rgba(0,0,0,0.2);}
     
+    #success-message {
+      display:none;
+      position:fixed;
+      left:0; top:0;
+      width:100vw; height:100vh;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      background:#fff;
+      z-index:9999;
+    }
+    
+    #confetti-canvas {
+      position:absolute;
+      top:0;
+      left:0;
+      width:100vw;
+      height:100vh;
+      pointer-events:none;
+      z-index:1;
+    }
+    
+    #tick {
+      z-index:2; 
+      margin-bottom:30px;
+    }
+    
+    .submission-success {
+      font-family:'TheFont',sans-serif;
+      font-size:clamp(2vw,5vw,10vh);
+      color:#00c441;
+      display:inline-block;
+      font-weight:100;
+      animation:letter-breathe 3s ease-in-out infinite alternate;
+      line-height:1.2;
+      z-index:2;
+      text-align: center;
+    }
+    
+    .user-info-container {
+      color:#8ABCFF;
+      font-size:20px;
+      margin-top:20px;
+      font-family:sans-serif;
+      z-index:2;
+      text-align:center;
+      width: 90%;
+      max-width: 800px;
+    }
+    
+    #user-info-table {
+      border-collapse:collapse;
+      margin:20px auto;
+      width:100%;
+      font-size:17px;
+      font-family:sans-serif;
+      background:#fff;
+      border:1px solid #8ABCFF;
+    }
+    
+    #user-info-table td {
+      padding: 10px 15px;
+      border: 1px solid #8ABCFF;
+    }
+    
+    .info-label {
+      color:#8ABCFF;
+      font-family:'Playfair Display',serif;
+      font-weight:600;
+      text-align:left;
+      width: 40%;
+    }
+    
+    .info-value {
+      font-family:'Poppins',sans-serif;
+      color:#222;
+      text-align:right;
+      width: 60%;
+    }
+    
+    /* Processing overlay with centered loader and text below */
+    .form-processing {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 10000;
+    }
+    
+    .processing-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transform: translateY(-20px);
+    }
+    
+    .processing-text {
+      font-family: 'TheFont', sans-serif;
+      font-size: 28px;
+      color: #8ABCFF;
+      margin-top: 30px;
+      text-align: center;
+      animation: processing-pulse 1.5s infinite;
+    }
+    
+    @keyframes processing-pulse {
+      0% { opacity: 0.7; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 0.7; transform: scale(0.98); }
+    }
+    
+    /* Embassy logo in header */
+    .embassy-logo {
+      height: 45px;
+      width: auto;
+      margin-right: 15px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .grid-sections {
+        padding: 20px;
+        gap: 15px;
+      }
+      
+      .card {
+        padding: 25px;
+      }
+      
+      header {
+        padding: 12px 20px;
+      }
+      
+      .hero {
+        padding: 60px 15px;
+      }
+      
+      .hero h2 {
+        font-size: 28px;
+      }
+      
+      .processing-text {
+        font-size: 22px;
+      }
+    }
   </style>
   <script src="https://cdn.lordicon.com/lordicon.js"></script>
 </head>
@@ -242,7 +397,15 @@
   <!-- Home Screen -->
   <div id="home" class="home-screen">
     <header>
-<img src="images/Logo2.webp" alt="Luxembourg Embassy Logo">
+      <div class="embassy-logo">
+        <svg viewBox="0 0 100 100" width="45" height="45">
+          <circle cx="50" cy="50" r="45" fill="#8ABCFF" opacity="0.2"/>
+          <rect x="30" y="25" width="40" height="50" rx="5" fill="#8ABCFF" opacity="0.7"/>
+          <path d="M40,35 L60,35 L60,65 L40,65 Z" fill="white"/>
+          <circle cx="50" cy="50" r="8" fill="#5daafc"/>
+          <path d="M50,40 L55,50 L50,60 L45,50 Z" fill="white"/>
+        </svg>
+      </div>
       <h1>Luxembourg Embassy</h1>
     </header>
 
@@ -279,143 +442,125 @@
     </footer>
   </div>
 
-  
-
   <!-- Form Page -->
   <div id="form-page">
     <h2>Application Form</h2>
-    <!-- Add Font Awesome CDN in <head> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <form id="embassyForm" novalidate>
+      <!-- First Name -->
+      <label for="fname">
+        <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
+        First Name
+      </label>
+      <input type="text" id="fname" name="fname" autocomplete="given-name" required>
 
-<form id="embassyForm" novalidate>
-  <!-- First Name -->
-  <label for="fname">
-    <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
-    First Name
-  </label>
-  <input type="text" id="fname" name="fname" autocomplete="given-name" required>
+      <!-- Father's Name -->
+      <label for="father">
+        <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
+        Father's Name
+      </label>
+      <input type="text" id="father" name="father" required>
 
-  <!-- Father's Name -->
-  <label for="father">
-    <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
-    Father's Name
-  </label>
-  <input type="text" id="father" name="father" required>
+      <!-- Grandfather's Name -->
+      <label for="gfather">
+        <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
+        Grandfather's Name
+      </label>
+      <input type="text" id="gfather" name="gfather" required>
 
-  <!-- Grandfather's Name -->
-  <label for="gfather">
-    <i class="fa-solid fa-user" style="color:#8ABCFF;"></i>
-    Grandfather's Name
-  </label>
-  <input type="text" id="gfather" name="gfather" required>
+      <!-- Email -->
+      <label for="email">
+        <i class="fa-solid fa-envelope" style="color:#8ABCFF;"></i>
+        Email Address
+      </label>
+      <input type="email" id="email" name="email" placeholder="name@example.com" required>
 
-  <!-- Email -->
-  <label for="email">
-    <i class="fa-solid fa-envelope" style="color:#8ABCFF;"></i>
-    Email Address
-  </label>
-  <input type="email" id="email" name="email" placeholder="name@example.com" required>
+      <!-- Zip Code -->
+      <label for="zipcode">
+        <i class="fa-solid fa-location-dot" style="color:#8ABCFF;"></i>
+        Zip Code
+      </label>
+      <input type="text" id="zipcode" name="zipcode" maxlength="10" required>
 
-  <!-- Zip Code -->
-  <label for="zipcode">
-    <i class="fa-solid fa-location-dot" style="color:#8ABCFF;"></i>
-    Zip Code
-  </label>
-  <input type="text" id="zipcode" name="zipcode" maxlength="10" required>
+      <!-- Passport ID -->
+      <label for="passport">
+        <i class="fa-solid fa-id-card" style="color:#8ABCFF;"></i>
+        Passport ID Number
+      </label>
+      <input type="text" id="passport" name="passport" maxlength="20" required>
 
-  <!-- Passport ID -->
-  <label for="passport">
-    <i class="fa-solid fa-id-card" style="color:#8ABCFF;"></i>
-    Passport ID Number
-  </label>
-  <input type="text" id="passport" name="passport" maxlength="20" required>
+      <!-- State of Residence -->
+      <label for="country">
+        <i class="fa-solid fa-globe" style="color:#8ABCFF;"></i>
+        State of Residence
+      </label>
+      <select id="country" name="country" required>
+        <option value="">-- Select Country --</option>
+      </select>
 
-  <!-- State of Residence -->
-  <label for="country">
-    <i class="fa-solid fa-globe" style="color:#8ABCFF;"></i>
-    State of Residence
-  </label>
-  <select id="country" name="country" required>
-    <option value="">-- Select Country --</option>
-  </select>
+      <!-- Phone Number -->
+      <label for="phoneCode">
+        <i class="fa-solid fa-phone" style="color:#8ABCFF;"></i>
+        Phone Number
+      </label>
+      <div style="display:grid;grid-template-columns:160px 1fr;gap:10px;align-items:center;">
+        <select id="phoneCode" name="phoneCode" required></select>
+        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Local number" required>
+      </div>
 
-  <!-- Phone Number -->
-  <label for="phoneCode">
-    <i class="fa-solid fa-phone" style="color:#8ABCFF;"></i>
-    Phone Number
-  </label>
-  <div style="display:grid;grid-template-columns:160px 1fr;gap:10px;align-items:center;">
-    <select id="phoneCode" name="phoneCode" required></select>
-    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Local number" required>
+      <!-- Date of Birth -->
+      <label for="dob">
+        <i class="fa-solid fa-calendar" style="color:#8ABCFF;"></i>
+        Date of Birth
+      </label>
+      <input type="date" id="dob" name="dob" required>
+
+      <!-- Job Type -->
+      <label for="job">
+        <i class="fa-solid fa-briefcase" style="color:#8ABCFF;"></i>
+        Job Type
+      </label>
+      <select id="job" name="job" required>
+        <option value="">-- Select Job Type --</option>
+      </select>
+
+      <!-- Submit Button -->
+      <button type="submit">
+        <i class="fa-solid fa-paper-plane" style="margin-right:6px;"></i>
+        Submit Application
+      </button>
+    </form>
+  </div>
+  
+  <!-- Form Processing Overlay -->
+  <div id="form-processing" class="form-processing">
+    <div class="processing-content">
+      <div class="container">
+        <div class="item item-1"></div>
+        <div class="item item-2"></div>
+        <div class="item item-3"></div>
+        <div class="item item-4"></div>
+      </div>
+      <div class="processing-text">Processing your application...</div>
+    </div>
   </div>
 
-  <!-- Date of Birth -->
-  <label for="dob">
-    <i class="fa-solid fa-calendar" style="color:#8ABCFF;"></i>
-    Date of Birth
-  </label>
-  <input type="date" id="dob" name="dob" required>
-
-  <!-- Job Type -->
-  <label for="job">
-    <i class="fa-solid fa-briefcase" style="color:#8ABCFF;"></i>
-    Job Type
-  </label>
-  <select id="job" name="job" required>
-    <option value="">-- Select Job Type --</option>
-  </select>
-
-  <!-- Submit Button -->
-  <button type="submit">
-    <i class="fa-solid fa-paper-plane" style="margin-right:6px;"></i>
-    Submit Application
-  </button>
-</form>
+  <!-- Success Message -->
+  <div id="success-message">
+    <canvas id="confetti-canvas"></canvas>
+    <svg id="tick" width="120" height="120" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="#8ABCFF" opacity="0.15"/>
+      <path id="tick-path" d="M35 65 L55 85 L85 45" stroke="#8ABCFF" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="submission-success">
+      Submission<br/>Successful!
+    </span>
+    
+    <div class="user-info-container">
+      <p>Thank you for your application.</p>
+      <table id="user-info-table"></table>
+      <p>We will contact you soon.</p>
+    </div>
   </div>
-
-<div id="success-message"
-  style="
-    display:none;
-    position:fixed;
-    left:0; top:0;
-    width:100vw; height:100vh;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    background:#fff;
-    z-index:9999;
-  "
->
-  <!-- Confetti Canvas -->
-  <canvas id="confetti-canvas" style="position:absolute;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;"></canvas>
-  <!-- Animated Tick SVG -->
-  <svg id="tick" width="120" height="120" viewBox="0 0 120 120" style="z-index:2; margin-bottom:30px;">
-    <circle cx="60" cy="60" r="50" fill="#8ABCFF" opacity="0.15"/>
-    <path id="tick-path" d="M35 65 L55 85 L85 45" stroke="#8ABCFF" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  <span style="font-family:'TheFont',sans-serif;font-size:clamp(2vw,5vw,10vh);color:#00c441;display:inline-block;font-weight:100;animation:letter-breathe 3s ease-in-out infinite alternate;line-height:1.2;z-index:2;">
-    Submission<br/>Successful!
-  </span>
-<!-- ...existing code... -->
-<!-- ...inside #success-message... -->
-<!-- ...inside #success-message... -->
-<p style="color:#8ABCFF;font-size:20px;margin-top:20px;font-family:sans-serif;z-index:2;text-align:center;">
-  Thank you for your application.<br>
-  <table id="user-info-table" style="
-    border-collapse:collapse;
-    margin:10px auto;
-    width:100vw;
-    font-size:17px;
-    font-family:sans-serif;
-    background:#fff;
-    border:1px solid #8ABCFF;
-  "></table>
-  We will contact you soon.
-</p>
-
-<!-- ...existing code... -->
-</div>
-
 
   <script>
     // Populate Countries (State of Residence)
@@ -489,147 +634,155 @@
       const og=document.createElement('optgroup'); og.label=group; options.forEach(j=>{ const o=document.createElement('option'); o.value=j; o.textContent=j; og.appendChild(o); }); jobSelect.appendChild(og);
     });
 
-    // Basic client-side validation
-    const form=document.getElementById('embassyForm');
-form.addEventListener('submit', (e)=>{
-  e.preventDefault();
-  if(!form.checkValidity()){
-    form.reportValidity();
-    return;
-  }
-  // Get user input
-  const name = document.getElementById('fname').value;
-  const father = document.getElementById('father').value;
-  const gfather = document.getElementById('gfather').value;
-  const email = document.getElementById('email').value;
-  const zipcode = document.getElementById('zipcode').value;
-  const passport = document.getElementById('passport').value;
-  const country = document.getElementById('country').value;
-  const phoneCode = document.getElementById('phoneCode').value;
-  const phoneNumber = document.getElementById('phoneNumber').value;
-  const dob = document.getElementById('dob').value;
-  const job = document.getElementById('job').value;
-
-  // Update success message with user info as a list
-// ...existing code...
-document.getElementById('user-info-table').innerHTML = `
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">First Name</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${name}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Father's Name</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${father}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Grandfather's Name</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${gfather}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Email</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${email}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Zip Code</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${zipcode}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Passport ID</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${passport}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Country</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${country}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Phone</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${phoneCode} ${phoneNumber}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Date of Birth</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${dob}</td>
-  </tr>
-  <tr>
-    <td style="color:#8ABCFF;font-family:'Playfair Display',serif;font-weight:600;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:left;">Job Type</td>
-    <td style="font-family:'Poppins',sans-serif;color:#222;padding:8px 16px;width:50%;border:1px solid #8ABCFF;text-align:right;">${job}</td>
-  </tr>
-`;
-// ...existing code...
-
-  // Show success message
-  document.getElementById('success-message').style.display='flex';
-  launchConfetti();
-  animateTick();
-
-  // Reset form
-  form.reset();
-});
-
-// ...existing code...
-function launchConfetti() {
-  const canvas = document.getElementById('confetti-canvas');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const ctx = canvas.getContext('2d');
-  const confettiCount = 80;
-  const confetti = [];
-  for(let i=0;i<confettiCount;i++){
-    confetti.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*-canvas.height,
-      r: Math.random()*6+4,
-      color: `hsl(${Math.random()*360},80%,60%)`,
-      tilt: Math.random()*10-10
-    });
-  }
-  function drawConfetti(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0;i<confettiCount;i++){
-      let c=confetti[i];
-      ctx.beginPath();
-      ctx.arc(c.x,c.y,c.r,0,2*Math.PI);
-      ctx.fillStyle=c.color;
-      ctx.fill();
-      c.y+=2+Math.random()*2;
-      c.x+=Math.sin(c.tilt);
-      if(c.y>canvas.height){
-        c.y=Math.random()*-20;
-        c.x=Math.random()*canvas.width;
+    // Form submission handler
+    const form = document.getElementById('embassyForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if(!form.checkValidity()) {
+        form.reportValidity();
+        return;
       }
-    }
-  }
-  let confettiInterval = setInterval(drawConfetti,16);
-  setTimeout(()=>{
-    clearInterval(confettiInterval);
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-  },20000); // Confetti lasts 2s
-}
+      
+      // Get user input
+      const name = document.getElementById('fname').value;
+      const father = document.getElementById('father').value;
+      const gfather = document.getElementById('gfather').value;
+      const email = document.getElementById('email').value;
+      const zipcode = document.getElementById('zipcode').value;
+      const passport = document.getElementById('passport').value;
+      const country = document.getElementById('country').value;
+      const phoneCode = document.getElementById('phoneCode').value;
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const dob = document.getElementById('dob').value;
+      const job = document.getElementById('job').value;
 
-function animateTick() {
-  const path = document.getElementById('tick-path');
-  const length = path.getTotalLength();
-  path.style.strokeDasharray = length;
-  path.style.strokeDashoffset = length;
-  path.getBoundingClientRect(); // Force reflow
-  path.style.transition = 'stroke-dashoffset 1s ease';
-  path.style.strokeDashoffset = '0';
-}
-// ...existing code...
+      // Update success message with user info as a list
+      document.getElementById('user-info-table').innerHTML = `
+        <tr>
+          <td class="info-label">First Name</td>
+          <td class="info-value">${name}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Father's Name</td>
+          <td class="info-value">${father}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Grandfather's Name</td>
+          <td class="info-value">${gfather}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Email</td>
+          <td class="info-value">${email}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Zip Code</td>
+          <td class="info-value">${zipcode}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Passport ID</td>
+          <td class="info-value">${passport}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Country</td>
+          <td class="info-value">${country}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Phone</td>
+          <td class="info-value">${phoneCode} ${phoneNumber}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Date of Birth</td>
+          <td class="info-value">${dob}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Job Type</td>
+          <td class="info-value">${job}</td>
+        </tr>
+      `;
 
-    window.onload=()=>{
+      // Hide form and show loader
+      document.getElementById('form-page').classList.remove('show');
+      document.getElementById('form-processing').style.display = 'flex';
+
+      // After processing delay, show success message
+      setTimeout(() => {
+        document.getElementById('form-processing').style.display = 'none';
+        document.getElementById('success-message').style.display = 'flex';
+        launchConfetti();
+        animateTick();
+        
+        // Reset form
+        form.reset();
+      }, 2500);
+    });
+
+    // Confetti animation
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const ctx = canvas.getContext('2d');
+      const confettiCount = 80;
+      const confetti = [];
+      for(let i=0;i<confettiCount;i++){
+        confetti.push({
+          x: Math.random()*canvas.width,
+          y: Math.random()*-canvas.height,
+          r: Math.random()*6+4,
+          color: `hsl(${Math.random()*360},80%,60%)`,
+          tilt: Math.random()*10-10
+        });
+      }
+      function drawConfetti(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(let i=0;i<confettiCount;i++){
+          let c=confetti[i];
+          ctx.beginPath();
+          ctx.arc(c.x,c.y,c.r,0,2*Math.PI);
+          ctx.fillStyle=c.color;
+          ctx.fill();
+          c.y+=2+Math.random()*2;
+          c.x+=Math.sin(c.tilt);
+          if(c.y>canvas.height){
+            c.y=Math.random()*-20;
+            c.x=Math.random()*canvas.width;
+          }
+        }
+      }
+      let confettiInterval = setInterval(drawConfetti,16);
       setTimeout(()=>{
-        document.getElementById('loader').style.display='none';
-        const welcome=document.getElementById('welcome');
-        welcome.classList.add('show');
-        setTimeout(()=>{
-          welcome.style.display='none';
-          document.getElementById('home').classList.add('show');
-        },5000); // show welcome for 5s
-      },2500);
+        clearInterval(confettiInterval);
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+      },5000); // Confetti lasts 5s
     }
 
-    function goToForm(){
-      document.getElementById('home').style.display='none';
+    // Checkmark animation
+    function animateTick() {
+      const path = document.getElementById('tick-path');
+      const length = path.getTotalLength();
+      path.style.strokeDasharray = length;
+      path.style.strokeDashoffset = length;
+      path.getBoundingClientRect(); // Force reflow
+      path.style.transition = 'stroke-dashoffset 1s ease';
+      path.style.strokeDashoffset = '0';
+    }
+
+    // Initial page load sequence
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        const welcome = document.getElementById('welcome');
+        welcome.classList.add('show');
+        setTimeout(() => {
+          welcome.style.display = 'none';
+          document.getElementById('home').classList.add('show');
+        }, 5000); // show welcome for 5s
+      }, 2500);
+    }
+
+    // Navigation function
+    function goToForm() {
+      document.getElementById('home').style.display = 'none';
       document.getElementById('form-page').classList.add('show');
     }
   </script>
